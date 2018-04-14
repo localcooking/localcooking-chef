@@ -105,26 +105,28 @@ spec {toURI} = T.simpleSpec performAction render
         , color: Typography.primary
         , style: createStyles {marginBottom: "1em", marginTop: "1em"}
         } [R.text "Work Your Own Schedule, Manage Your Own Orders"]
-      , if state.windowSize < Laptop
-          then paragraph2
-          else
-            grid
-              { spacing: Grid.spacing8
-              , container: true
-              }
-              [ grid {xs: 4, item: true}
-                [ R.img
-                  [ RP.src $ URI.print $ toURI $ toLocation Paragraph2Png
-                  , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0.2em 0 0 0.2em"}
-                  ] []
-                ]
-              , grid {xs: 8, item: true}
-                [ R.div [RP.style {marginTop: "1em"}] []
-                , paragraph2
-                , R.div [RP.style {marginBottom: "1em"}] []
-                ]
-              ]
-      , divider {}
+      ] <> ( if state.windowSize < Laptop
+                then paragraph2
+                else
+                  [ grid
+                    { spacing: Grid.spacing8
+                    , container: true
+                    }
+                    [ grid {xs: 4, item: true}
+                      [ R.img
+                        [ RP.src $ URI.print $ toURI $ toLocation Paragraph2Png
+                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0.2em 0 0 0.2em"}
+                        ] []
+                      ]
+                    , grid {xs: 8, item: true} $
+                      [ R.div [RP.style {marginTop: "1em"}] []
+                      ] <> paragraph2 <>
+                      [ R.div [RP.style {marginBottom: "1em"}] []
+                      ]
+                    ]
+                  ]
+           ) <>
+      [ divider {}
       , typography
         { variant: if state.windowSize < Laptop then Typography.headline else Typography.display1
         , align: Typography.right
@@ -192,6 +194,7 @@ paragraph1 =
   , typography
     { variant: Typography.body1
     , align: Typography.left
+    , paragraph: true
     , style: createStyles {textIndent: "3em"}
     }
     [ R.text "Every menu is modern and richly interactive — chefs can publish a near unlimited amount of detail per meal, giving rise to various multimedia accompanied with each meal description — from close-ups of a finished product, to preparation instructions, we have an open playing field for our chefs to express their talent."
@@ -207,32 +210,28 @@ paragraph1 =
 
 
 -- FIXME links!!
-paragraph2 :: R.ReactElement
-paragraph2 = list {dense: true}
-  [ listItem {}
-    [ listItemIcon {} searchIcon
-    , listItemText
-      {primary: "Browse our Chefs and Menus"}
+paragraph2 :: Array R.ReactElement
+paragraph2 =
+  [ typography
+    { variant: Typography.body1
+    , align: Typography.left
+    , style: createStyles {textIndent: "3em"}
+    }
+    [ R.text "We want to make working for Local Cooking a pleasure; our customer market is not based on immediate time constraints, so neither should our chefs. Our schedule reservation interface allows chefs to schedule their work around their dynamic life."
     ]
-  , listItem {}
-    [ listItemIcon {} pictureInPictureIcon
-    , listItemText
-      {primary: "View the details on specific meals — the ingredients, the culture and history, and how to prepare it"}
+  , typography
+    { variant: Typography.body1
+    , align: Typography.left
+    , style: createStyles {textIndent: "3em"}
+    }
+    [ R.text "Reservations to work in the kitchen are first-come-first-serve, but wait listing and schedule bartering is built-in: no more hassling with managers to get the hours you want."
     ]
-  , listItem {}
-    [ listItemIcon {} shoppingCartIcon
-    , listItemText
-      {primary: "Create an order of at least $100, at least two weeks in advance"}
-    ]
-  , listItem {}
-    [ listItemIcon {} timelapseIcon
-    , listItemText
-      {primary: "Checkout your cart, wait for updates on your order"}
-    ]
-  , listItem {}
-    [ listItemIcon {} localShippingIcon
-    , listItemText
-      {primary: "Receive your delivery of frozen meals, store them, or prepare and enjoy!"}
+  , typography
+    { variant: Typography.body1
+    , align: Typography.left
+    , style: createStyles {textIndent: "3em"}
+    }
+    [ R.text "Because chefs work their own schedules, they are expected to meet their obligations independently; however, Local Cooking is a meal insurance company, and we will verify that our chefs are on-schedule, or close to it. We refrain from micromanagement — so long as your practices aren't questionable and you're getting along with the other chefs, you are free to do what you need when you need to."
     ]
   ]
 
