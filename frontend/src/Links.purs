@@ -196,7 +196,10 @@ instance fromLocationSiteLinks :: FromLocation SiteLinks where
     where
       siteLinksPathParser :: Parser SiteLinks
       siteLinksPathParser = do
+        divider
         let def = defaultSiteLinksPathParser userDetailsLinksParser
         def
+        where
+          divider = void (char '/')
         -- TODO put nonstandard parsers here
 
