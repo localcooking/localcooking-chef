@@ -92,7 +92,7 @@ spec {toURI} = T.simpleSpec performAction render
                     , grid {xs: 4, item: true}
                       [ R.img
                         [ RP.src $ URI.print $ toURI $ toLocation Paragraph1Png
-                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0 0.2em 0.2em 0"}
+                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0.2em"}
                         ] []
                       ]
                     ]
@@ -115,7 +115,7 @@ spec {toURI} = T.simpleSpec performAction render
                     [ grid {xs: 4, item: true}
                       [ R.img
                         [ RP.src $ URI.print $ toURI $ toLocation Paragraph2Png
-                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0.2em 0 0 0.2em"}
+                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0.2em"}
                         ] []
                       ]
                     , grid {xs: 8, item: true} $
@@ -151,7 +151,7 @@ spec {toURI} = T.simpleSpec performAction render
                     , grid {xs: 4, item: true}
                       [ R.img
                         [ RP.src $ URI.print $ toURI $ toLocation Paragraph3Png
-                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0 0.2em 0.2em 0"}
+                        , RP.style {width: "100%", marginBottom: "1em", borderRadius: "0.2em"}
                         ] []
                       ]
                     ]
@@ -216,6 +216,7 @@ paragraph2 =
     { variant: Typography.body1
     , align: Typography.left
     , style: createStyles {textIndent: "3em"}
+    , paragraph: true
     }
     [ R.text "We want to make working for Local Cooking a pleasure; our customer market is not based on immediate time constraints, so neither should our chefs. Our schedule reservation interface allows chefs to schedule their work around their dynamic life."
     ]
@@ -223,6 +224,7 @@ paragraph2 =
     { variant: Typography.body1
     , align: Typography.left
     , style: createStyles {textIndent: "3em"}
+    , paragraph: true
     }
     [ R.text "Reservations to work in the kitchen are first-come-first-serve, but wait listing and schedule bartering is built-in: no more hassling with managers to get the hours you want."
     ]
@@ -244,27 +246,21 @@ paragraph3 =
     , style: createStyles {textIndent: "3em"}
     , paragraph: true
     }
-    [ R.text "Every chef has a "
-    , R.em [] [R.text "bi-weekly"]
-    , R.text " schedule, and every order must be filed at least two weeks in advance — each menu has its own shipping date, and each chef has their own planned schedule to fill their orders. This allows chefs to "
-    , R.em [] [R.text "care"]
-    , R.text " about each meal and give their full attention to their craft, without having to worry about wasteful time constraints. Each chef:"
+    [ R.text "The traditional road to culinary stardom is paved with monumentally excessive labor, mostly stemming from the inability to prove your reliable talent."
     ]
-  , list {dense: true}
-    [ listItem {}
-      [ listItemIcon {} restaurantMenuIcon
-      , listItemText
-        {primary: "Manages their own work schedule"}
-      ]
-    , listItem {}
-      [ listItemIcon {} restaurantMenuIcon
-      , listItemText
-        {primary: "Creates their own menus and portfolio"}
-      ]
-    , listItem {}
-      [ listItemIcon {} restaurantMenuIcon
-      , listItemText
-        {primary: "Builds their own consumer base and market"}
-      ]
+  , typography
+    { variant: Typography.body1
+    , align: Typography.left
+    , style: createStyles {textIndent: "3em"}
+    , paragraph: true
+    }
+    [ R.text "Our platform tracks orders and has a sophisticated review system — each chef's menus, order history, and customer feedback is automatically included in their online portfolio; we recognize chefs who work for us may have other long-term interests than Local Cooking, and we want to support that. Every chef's profile belongs to them after employment."
+    ]
+  , typography
+    { variant: Typography.body1
+    , align: Typography.left
+    , style: createStyles {textIndent: "3em"}
+    }
+    [ R.text "We also feature an apprenticeship program, and a sub-contracting tool in our platform — we want to employ useful cooks wherever they fit best; if menu design isn't your thing, we have plenty of routine prep work. Likewise, if you want to improve your skills, we can pair you with a more senior level chef of your choosing."
     ]
   ]
