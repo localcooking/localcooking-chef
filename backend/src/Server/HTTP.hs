@@ -12,8 +12,8 @@ module Server.HTTP where
 
 import Links (SiteLinks (RootLink))
 
-import LocalCooking.Types (AppM)
-import LocalCooking.Types.Env (Env (..))
+import LocalCooking.Types (Env (..))
+import LocalCooking.Function.System (SystemM)
 
 import Web.Routes.Nested (RouterT, match, matchHere, matchGroup, matchAny, textOnly, l_, (</>), o_)
 import Network.Wai.Trans (MiddlewareT)
@@ -29,9 +29,8 @@ import Control.Monad.Trans (lift)
 
 
 
-httpServer :: (SiteLinks -> MiddlewareT AppM) -> RouterT (MiddlewareT AppM) sec AppM ()
-httpServer handleAuthToken = do
-  Env{envHostname,envTls} <- lift ask
+httpServer :: Env -> (SiteLinks -> MiddlewareT SystemM) -> RouterT (MiddlewareT SystemM) sec SystemM ()
+httpServer Env{envMkURI} handleAuthToken = do
 
   -- main routes
   -- matchGroup (l_ "userDetails" </> o_) $ do
@@ -50,10 +49,7 @@ httpServer handleAuthToken = do
       [ ( "Location"
         , T.encodeUtf8
           $ printURI
-          $ packLocation
-              (Strict.Just $ if envTls then "https" else "http")
-              True
-              envHostname
+          $ envMkURI
           $ toLocation RootLink
         )
       ]

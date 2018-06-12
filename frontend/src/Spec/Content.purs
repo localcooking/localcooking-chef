@@ -3,7 +3,6 @@ module Spec.Content where
 import Spec.Content.Root (root)
 import Spec.Content.UserDetails (userDetails)
 import Links (SiteLinks (..))
-import LocalCooking.Window (WindowSize)
 
 import Prelude
 
@@ -12,6 +11,7 @@ import React as R
 import React.DOM as R
 import React.DOM.Props as RP
 import React.Signal.WhileMounted as Signal
+import DOM.HTML.Window.Extra (WindowSize)
 import Data.UUID (GENUUID)
 import Data.URI (URI)
 import Data.URI.Location (Location)

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 50e9e50654973c89236887894b0860cb32ddbbeb6e609de25e0e295bcecba2fc
+-- hash: 1f672728e77fd9d9be634a6023ab39d3ad747c8a2e8553930a6f377572e19a8d
 
 name:           localcooking-chef
 version:        0.0.0
@@ -46,6 +46,9 @@ library
     , file-embed
     , http-types
     , localcooking-db
+    , localcooking-dependencies
+    , localcooking-fb
+    , localcooking-function
     , localcooking-shared
     , localcooking-template
     , mtl

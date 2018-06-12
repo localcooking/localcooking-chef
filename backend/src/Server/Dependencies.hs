@@ -4,14 +4,14 @@
 
 module Server.Dependencies where
 
-import LocalCooking.Types (AppM)
-
+import LocalCooking.Dependencies.Chef (chefDependencies)
+import LocalCooking.Function.System (SystemM)
 
 import Web.Routes.Nested (l_, o_, (</>))
 import Web.Dependencies.Sparrow (SparrowServerT, matchGroup)
 import Network.Wai.Trans (MiddlewareT)
 
 
-dependencies :: SparrowServerT (MiddlewareT AppM) [] AppM ()
+dependencies :: SparrowServerT (MiddlewareT SystemM) [] SystemM ()
 dependencies =
-  pure ()
+  chefDependencies

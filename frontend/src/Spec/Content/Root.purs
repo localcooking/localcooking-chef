@@ -1,14 +1,12 @@
 module Spec.Content.Root where
 
-import LocalCooking.Window (WindowSize (Laptop))
 import Links (AboutPageLinks (..))
-import LocalCooking.Links.Class (toLocation)
 
 import Prelude
 import Data.UUID (GENUUID)
 import Data.URI (URI)
 import Data.URI.URI as URI
-import Data.URI.Location (Location)
+import Data.URI.Location (toLocation, Location)
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Eff.Unsafe (unsafeCoerceEff, unsafePerformEff)
@@ -18,6 +16,7 @@ import React as R
 import React.DOM as R
 import React.DOM.Props as RP
 import React.Signal.WhileMounted as Signal
+import DOM.HTML.Window.Extra (WindowSize (Laptop))
 
 import MaterialUI.Types (createStyles)
 import MaterialUI.Typography (typography)
