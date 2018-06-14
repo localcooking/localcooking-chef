@@ -1,13 +1,11 @@
 module User where
 
 import LocalCooking.Global.User.Class (class UserDetails)
--- import LocalCooking.Common.User.Role (UserRole)
 import LocalCooking.Semantics.Common (User)
 
 import Prelude
 import Data.Maybe (Maybe)
 import Data.Generic (class Generic, gShow)
-import Text.Email.Validate (EmailAddress)
 
 
 
