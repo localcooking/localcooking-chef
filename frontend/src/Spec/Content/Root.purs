@@ -12,8 +12,8 @@ import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Eff.Unsafe (unsafeCoerceEff, unsafePerformEff)
 
 import Thermite as T
-import React as R
-import React.DOM as R
+import React (ReactElement, createClass, createElement) as R
+import React.DOM (div, em, img, strong, text) as R
 import React.DOM.Props as RP
 import React.Signal.WhileMounted as Signal
 import DOM.HTML.Window.Extra (WindowSize (Laptop))
@@ -24,16 +24,6 @@ import MaterialUI.Typography as Typography
 import MaterialUI.Divider (divider)
 import MaterialUI.Grid (grid)
 import MaterialUI.Grid as Grid
-import MaterialUI.List (list)
-import MaterialUI.ListItem (listItem)
-import MaterialUI.ListItemText (listItemText)
-import MaterialUI.ListItemIcon (listItemIcon)
-import MaterialUI.Icons.Search (searchIcon)
-import MaterialUI.Icons.PictureInPicture (pictureInPictureIcon)
-import MaterialUI.Icons.ShoppingCart (shoppingCartIcon)
-import MaterialUI.Icons.Timelapse (timelapseIcon)
-import MaterialUI.Icons.LocalShipping (localShippingIcon)
-import MaterialUI.Icons.RestaurantMenu (restaurantMenuIcon)
 
 import IxSignal.Internal (IxSignal)
 import IxSignal.Internal as IxSignal

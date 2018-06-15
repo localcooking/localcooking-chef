@@ -4,26 +4,17 @@ import Links (SiteLinks)
 
 import Prelude
 import Data.URI (URI)
-import Data.URI.URI as URI
-import Data.URI.Location (toLocation, Location)
+import Data.URI.Location (Location)
 import Data.UUID (GENUUID)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Unsafe (unsafePerformEff, unsafeCoerceEff)
-import Control.Monad.Eff.Uncurried (mkEffFn1)
 import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Eff.Exception (EXCEPTION)
 
 import Thermite as T
 import React as R
-import React.DOM as R
-import React.DOM.SVG as RS
-import React.DOM.Props as RP
-import React.DOM.Props.PreventDefault (preventDefault)
 import React.Signal.WhileMounted as Signal
-
-import MaterialUI.Button (button)
-import MaterialUI.Button as Button
 
 import IxSignal.Internal (IxSignal)
 import IxSignal.Internal as IxSignal

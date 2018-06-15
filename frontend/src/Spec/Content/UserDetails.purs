@@ -6,24 +6,13 @@ import Spec.Content.UserDetails.General (general)
 import Prelude
 
 import Thermite as T
-import React as R
-import React.DOM as R
-import React.DOM.Props as RP
+import React (ReactElement, createClass, createElement) as R
 import React.Signal.WhileMounted as Signal
-
-import MaterialUI.Types (createStyles)
-import MaterialUI.Drawer (drawer)
-import MaterialUI.Drawer as Drawer
-import MaterialUI.Divider (divider)
-import MaterialUI.List (list)
-import MaterialUI.ListItem (listItem)
-import MaterialUI.ListItemText (listItemText)
 
 import Data.Maybe (Maybe (..))
 import Data.UUID (GENUUID)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Ref (REF)
-import Control.Monad.Eff.Uncurried (mkEffFn1)
 import Control.Monad.Eff.Unsafe (unsafeCoerceEff, unsafePerformEff)
 import Control.Monad.Eff.Exception (EXCEPTION)
 

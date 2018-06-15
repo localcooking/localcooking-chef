@@ -1,6 +1,6 @@
 module Main where
 
-import Links (SiteLinks (..), ImageLinks (Logo40Png), initSiteLinks)
+import Links (ImageLinks (Logo40Png), initSiteLinks)
 import Colors (palette)
 import User (UserDetails (..), PreUserDetails (..))
 import Spec.Topbar.Buttons (topbarButtons)
@@ -9,7 +9,6 @@ import Spec.Content.UserDetails (userDetails)
 import LocalCooking.Types.ServerToClient (env)
 import LocalCooking.Main (defaultMain)
 import LocalCooking.Spec.Misc.Branding (mainBrand)
-import LocalCooking.Spec.Misc.Icons.ChefHat (chefHatViewBox, chefHat)
 import LocalCooking.Dependencies.Chef (chefDependencies, newChefQueues)
 
 import Prelude
@@ -23,25 +22,15 @@ import Control.Monad.Eff.Timer (TIMER)
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import Control.Monad.Eff.Uncurried (mkEffFn1)
-import Control.Monad.Eff.Unsafe (unsafeCoerceEff)
 import Control.Execution.Immediate (SET_IMMEDIATE_SHIM)
 
-import React as R
-import React.DOM as R
-import React.DOM.SVG as RS
-import React.DOM.Props as RP
+import React.DOM (text) as R
 import MaterialUI.InjectTapEvent (INJECT_TAP_EVENT)
-import MaterialUI.Divider (divider)
 import MaterialUI.Button (button)
 import MaterialUI.Button as Button
 import MaterialUI.SvgIcon (svgIcon)
 import MaterialUI.SvgIcon as SvgIcon
-import MaterialUI.ListItem (listItem)
-import MaterialUI.ListItemIcon (listItemIcon)
-import MaterialUI.ListItemText (listItemText)
 import MaterialUI.Types (createStyles)
-import MaterialUI.Icons.RestaurantMenu (restaurantMenuIcon)
 import DOM (DOM)
 import DOM.HTML.Types (HISTORY)
 import WebSocket (WEBSOCKET)
@@ -111,13 +100,13 @@ main = do
       }
     , topbar:
       { imageSrc: toLocation Logo40Png
-      , buttons: \_ -> [] -- \{toURI,siteLinks,currentPageSignal,windowSizeSignal,authTokenSignal} ->
-        -- [ topbarButtons
-        --   { currentPageSignal
-        --   , siteLinks
-        --   , toURI
-        --   }
-        -- ]
+      , buttons: \{toURI,siteLinks,currentPageSignal,windowSizeSignal,authTokenSignal} ->
+        [ topbarButtons
+          { currentPageSignal
+          , siteLinks
+          , toURI
+          }
+        ]
       }
     , content: \{toURI,siteLinks,windowSizeSignal,currentPageSignal} ->
       [ content {toURI,siteLinks,windowSizeSignal,currentPageSignal} ]

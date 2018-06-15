@@ -3,7 +3,7 @@ module Links where
 import LocalCooking.Global.Links.Class (class LocalCookingSiteLinks, class LocalCookingUserDetailsLinks, replaceState', defaultSiteLinksPathParser)
 
 import Prelude
-import Data.Maybe (Maybe (..), maybe)
+import Data.Maybe (Maybe (..))
 import Data.Either (Either (..))
 import Data.URI (Query (..))
 import Data.URI.URI as URI
@@ -14,16 +14,15 @@ import Data.Path.Pathy ((</>), dir, file, rootDir, Path, Rel, File, Sandboxed)
 import Data.Generic (class Generic, gEq, gShow)
 import Data.NonEmpty ((:|))
 import Text.Parsing.StringParser (Parser, try, runParser)
-import Text.Parsing.StringParser.String (char, string, eof)
-import Text.Parsing.StringParser.Combinators (optionMaybe)
+import Text.Parsing.StringParser.String (char, string)
 import Control.Alternative ((<|>))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, warn)
+
 import DOM (DOM)
 import DOM.HTML (window)
 import DOM.HTML.Window (location, history)
 import DOM.HTML.Location (href)
-import DOM.HTML.History (DocumentTitle (..))
 import DOM.HTML.Types (HISTORY)
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (oneOf)

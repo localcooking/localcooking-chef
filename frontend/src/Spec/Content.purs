@@ -1,17 +1,9 @@
 module Spec.Content where
 
 import Spec.Content.Root (root)
-import Spec.Content.UserDetails (userDetails)
 import Links (SiteLinks (..))
 
 import Prelude
-
-import Thermite as T
-import React as R
-import React.DOM as R
-import React.DOM.Props as RP
-import React.Signal.WhileMounted as Signal
-import DOM.HTML.Window.Extra (WindowSize)
 import Data.UUID (GENUUID)
 import Data.URI (URI)
 import Data.URI.Location (Location)
@@ -21,11 +13,15 @@ import Control.Monad.Eff.Unsafe (unsafeCoerceEff, unsafePerformEff)
 import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Eff.Exception (EXCEPTION)
 
+import Thermite as T
+import React (ReactElement, createClass, createElement) as R
+import React.DOM (text) as R
+import React.Signal.WhileMounted as Signal
+import DOM.HTML.Window.Extra (WindowSize)
 import Crypto.Scrypt (SCRYPT)
 
 import IxSignal.Internal (IxSignal)
 import IxSignal.Internal as IxSignal
-import Partial.Unsafe (unsafePartial)
 
 
 
