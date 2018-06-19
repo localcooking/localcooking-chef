@@ -78,6 +78,7 @@ userDetailsLinksToPath x = case x of
 
 userDetailsLinksParser :: Parser UserDetailsLinks
 userDetailsLinksParser = do
+  void divider
   let general = do
         void (string "general")
         pure UserDetailsGeneralLink
@@ -86,6 +87,8 @@ userDetailsLinksParser = do
         pure UserDetailsSecurityLink
   try general
     <|> security
+  where
+    divider = char '/'
 
 
 data SiteLinks
