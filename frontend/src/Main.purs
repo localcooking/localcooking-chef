@@ -6,6 +6,7 @@ import User (UserDetails (..), PreUserDetails (..))
 import Spec.Topbar.Buttons (topbarButtons)
 import Spec.Content (content)
 import Spec.Content.UserDetails (userDetails)
+import Spec.Snackbar (messages)
 import LocalCooking.Types.ServerToClient (env)
 import LocalCooking.Main (defaultMain)
 import LocalCooking.Spec.Misc.Branding (mainBrand)
@@ -37,6 +38,9 @@ import WebSocket (WEBSOCKET)
 import Network.HTTP.Affjax (AJAX)
 import Browser.WebStorage (WEB_STORAGE)
 import Crypto.Scrypt (SCRYPT)
+import Queue.Types (readOnly)
+import Queue.One as One
+
 
 
 -- | All top-level effects
@@ -65,6 +69,7 @@ main = do
   initSiteLink <- initSiteLinks
 
   chefQueues <- newChefQueues
+  siteErrorQueue <- One.newQueue
 
 
   defaultMain
@@ -120,6 +125,11 @@ main = do
         case mUser of
           Just user -> pure $ Just $ UserDetails {user}
           _ -> pure Nothing
+      }
+    , error:
+      { content:
+        [ messages {siteErrorQueue: readOnly siteErrorQueue}
+        ]
       }
     , extendedNetwork:
       [ Button.withStyles
