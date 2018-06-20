@@ -9,12 +9,12 @@
 module Server where
 
 import Server.HTTP (httpServer)
-import Server.Dependencies (dependencies)
 import Server.Assets (favicons, frontend, frontendMin)
 import Links (SiteLinks)
 
 import LocalCooking.Server (LocalCookingArgs (..))
 import LocalCooking.Colors (LocalCookingColors (..))
+import LocalCooking.Dependencies.Chef (chefDependencies)
 
 import Text.Lucius (Color (..))
 
@@ -25,7 +25,7 @@ server = LocalCookingArgs
   , localCookingArgsFrontendMin = frontendMin
   , localCookingArgsFavicons = favicons
   , localCookingArgsHTTP = httpServer
-  , localCookingArgsDeps = dependencies
+  , localCookingArgsDeps = chefDependencies
   , localCookingArgsColors = LocalCookingColors
     { localCookingColorsMain = Color 0 60 143
     , localCookingColorsActive = Color 21 101 192
