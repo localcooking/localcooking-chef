@@ -1,9 +1,12 @@
 module Spec.Content.UserDetails where
 
 import Links (SiteLinks (UserDetailsLink), UserDetailsLinks (..))
+import User (UserDetails)
 import Spec.Content.UserDetails.General (general)
+import LocalCooking.Thermite.Params (LocalCookingParams, LocalCookingState, LocalCookingAction, performActionLocalCooking, whileMountedLocalCooking, initLocalCookingState)
 
 import Prelude
+import Data.Lens (Lens', Prism', lens, prism')
 
 import Thermite as T
 import React (ReactElement, createClass, createElement) as R
@@ -21,17 +24,18 @@ import IxSignal.Internal (IxSignal)
 import IxSignal.Internal as IxSignal
 
 
+
 type State =
-  { page :: SiteLinks
+  { localCooking :: LocalCookingState SiteLinks UserDetails
   }
 
-initialState :: {initSiteLinks :: SiteLinks} -> State
-initialState {initSiteLinks} =
-  { page: initSiteLinks
+initialState :: LocalCookingState SiteLinks UserDetails -> State
+initialState localCooking =
+  { localCooking
   }
 
 data Action
-  = ChangedCurrentPage SiteLinks
+  = LocalCookingAction (LocalCookingAction SiteLinks UserDetails)
 
 type Effects eff =
   ( ref :: REF
@@ -39,19 +43,21 @@ type Effects eff =
   , exception :: EXCEPTION
   | eff)
 
+getLCState :: Lens' State (LocalCookingState SiteLinks UserDetails)
+getLCState = lens (_.localCooking) (_ { localCooking = _ })
+
 
 spec :: forall eff
-      . { siteLinks :: SiteLinks -> Eff (Effects eff) Unit
-        }
+      . LocalCookingParams SiteLinks UserDetails (Effects eff)
      -> T.Spec (Effects eff) State Unit Action
-spec {siteLinks} = T.simpleSpec performAction render
+spec params@{siteLinks} = T.simpleSpec performAction render
   where
     performAction action props state = case action of
-      ChangedCurrentPage x -> void $ T.cotransform _ { page = x }
+      LocalCookingAction a -> performActionLocalCooking getLCState a props state
 
     render :: T.Render State Unit Action
     render dispatch props state children =
-      [ case state.page of -- TODO pack currentPageSignal listener to this level, so
+      [ case state.localCooking.currentPage of -- TODO pack currentPageSignal listener to this level, so
                             -- side buttons aren't redrawn
           UserDetailsLink mUserDetails -> case mUserDetails of
             Nothing -> general
@@ -63,18 +69,18 @@ spec {siteLinks} = T.simpleSpec performAction render
 
 
 userDetails :: forall eff
-             . { currentPageSignal :: IxSignal (Effects eff) SiteLinks
-               , siteLinks :: SiteLinks -> Eff (Effects eff) Unit
-               }
+             . LocalCookingParams SiteLinks UserDetails (Effects eff)
             -> R.ReactElement
-userDetails {currentPageSignal,siteLinks} =
-  let init =
-        { initSiteLinks: unsafePerformEff $ IxSignal.get currentPageSignal
-        }
-      {spec: reactSpec, dispatcher} = T.createReactSpec (spec {siteLinks}) (initialState init)
+userDetails params =
+  let {spec: reactSpec, dispatcher} =
+        T.createReactSpec
+          ( spec params
+          ) (initialState (unsafePerformEff (initLocalCookingState params)))
       reactSpec' =
-        Signal.whileMountedIxUUID
-          currentPageSignal
-          (\this x -> unsafeCoerceEff $ dispatcher this (ChangedCurrentPage x))
-        reactSpec
+        whileMountedLocalCooking
+          params
+          "Spec.Content"
+          LocalCookingAction
+          (\this -> unsafeCoerceEff <<< dispatcher this)
+          reactSpec
   in  R.createElement (R.createClass reactSpec') unit []

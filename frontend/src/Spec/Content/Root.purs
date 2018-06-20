@@ -1,12 +1,15 @@
 module Spec.Content.Root where
 
-import Links (AboutPageLinks (..))
+import Links (SiteLinks, AboutPageLinks (..))
+import User (UserDetails)
+import LocalCooking.Thermite.Params (LocalCookingParams, LocalCookingState, LocalCookingAction, performActionLocalCooking, whileMountedLocalCooking, initLocalCookingState)
 
 import Prelude
 import Data.UUID (GENUUID)
 import Data.URI (URI)
 import Data.URI.URI as URI
 import Data.URI.Location (toLocation, Location)
+import Data.Lens (Lens', Prism', lens, prism')
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Eff.Unsafe (unsafeCoerceEff, unsafePerformEff)
@@ -30,17 +33,18 @@ import IxSignal.Internal as IxSignal
 
 
 
+
 type State =
-  { windowSize :: WindowSize
+  { localCooking :: LocalCookingState SiteLinks UserDetails
   }
 
-initialState :: {initWindowSize :: WindowSize} -> State
-initialState {initWindowSize} =
-  { windowSize: initWindowSize
+initialState :: LocalCookingState SiteLinks UserDetails -> State
+initialState localCooking =
+  { localCooking
   }
 
 data Action
-  = ChangedWindowSize WindowSize
+  = LocalCookingAction (LocalCookingAction SiteLinks UserDetails)
 
 type Effects eff =
   ( ref       :: REF
@@ -48,25 +52,29 @@ type Effects eff =
   , exception :: EXCEPTION
   | eff)
 
+getLCState :: Lens' State (LocalCookingState SiteLinks UserDetails)
+getLCState = lens (_.localCooking) (_ { localCooking = _ })
+
 
 spec :: forall eff
-      . { toURI :: Location -> URI
-        }
-     -> T.Spec eff State Unit Action
-spec {toURI} = T.simpleSpec performAction render
+      . LocalCookingParams SiteLinks UserDetails (Effects eff)
+     -> T.Spec (Effects eff) State Unit Action
+spec params@{toURI} = T.simpleSpec performAction render
   where
     performAction action props state = case action of
-      ChangedWindowSize w -> void $ T.cotransform _ { windowSize = w }
+      LocalCookingAction a -> performActionLocalCooking getLCState a props state
 
     render :: T.Render State Unit Action
     render dispatch props state children =
       [ typography
-        { variant: if state.windowSize < Laptop then Typography.headline else Typography.display1
+        { variant: if state.localCooking.windowSize < Laptop
+                      then Typography.headline
+                      else Typography.display1
         , align: Typography.right
         , color: Typography.primary
         , style: createStyles {marginBottom: "1em"}
         } [R.text "Build Your Own Menus, Sell Your Own Creations"]
-      ] <> ( if state.windowSize < Laptop
+      ] <> ( if state.localCooking.windowSize < Laptop
                 then paragraph1
                 else
                   [ grid
@@ -89,12 +97,14 @@ spec {toURI} = T.simpleSpec performAction render
            ) <>
       [ divider {}
       , typography
-        { variant: if state.windowSize < Laptop then Typography.headline else Typography.display1
+        { variant: if state.localCooking.windowSize < Laptop
+                      then Typography.headline
+                      else Typography.display1
         , align: Typography.left
         , color: Typography.primary
         , style: createStyles {marginBottom: "1em", marginTop: "1em"}
         } [R.text "Work Your Own Schedule, Manage Your Own Orders"]
-      ] <> ( if state.windowSize < Laptop
+      ] <> ( if state.localCooking.windowSize < Laptop
                 then paragraph2
                 else
                   [ grid
@@ -117,12 +127,14 @@ spec {toURI} = T.simpleSpec performAction render
            ) <>
       [ divider {}
       , typography
-        { variant: if state.windowSize < Laptop then Typography.headline else Typography.display1
+        { variant: if state.localCooking.windowSize < Laptop
+                      then Typography.headline
+                      else Typography.display1
         , align: Typography.right
         , color: Typography.primary
         , style: createStyles {marginBottom: "1em", marginTop: "1em"}
         } [R.text "Develop Your Own Portfolio And Local Reputation"]
-      ] <> ( if state.windowSize < Laptop
+      ] <> ( if state.localCooking.windowSize < Laptop
                 then paragraph3
                 else
                   [ grid
@@ -149,19 +161,19 @@ spec {toURI} = T.simpleSpec performAction render
 
 
 root :: forall eff
-      . { windowSizeSignal :: IxSignal (Effects eff) WindowSize
-        , toURI :: Location -> URI
-        }
+      . LocalCookingParams SiteLinks UserDetails (Effects eff)
      -> R.ReactElement
-root {windowSizeSignal,toURI} =
-  let init =
-        { initWindowSize: unsafePerformEff $ IxSignal.get windowSizeSignal
-        }
-      {spec: reactSpec, dispatcher} = T.createReactSpec (spec {toURI}) (initialState init)
+root params =
+  let {spec: reactSpec, dispatcher} =
+        T.createReactSpec
+          ( spec params
+          ) (initialState (unsafePerformEff (initLocalCookingState params)))
       reactSpec' =
-          Signal.whileMountedIxUUID
-            windowSizeSignal
-            (\this x -> unsafeCoerceEff $ dispatcher this (ChangedWindowSize x))
+        whileMountedLocalCooking
+          params
+          "Spec.Content"
+          LocalCookingAction
+          (\this -> unsafeCoerceEff <<< dispatcher this)
           reactSpec
   in  R.createElement (R.createClass reactSpec') unit []
 

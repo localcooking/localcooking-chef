@@ -3,8 +3,10 @@ module Main where
 import Colors (palette)
 import User (UserDetails (..), PreUserDetails (..))
 import Spec.Topbar.Buttons (topbarButtons)
+import Spec.Drawers.Buttons (drawersButtons)
 import Spec.Content (content)
 import Spec.Content.UserDetails (userDetails)
+import Spec.Content.UserDetails.Buttons (userDetailsButtons)
 import Spec.Snackbar (messages)
 import LocalCooking.Types.ServerToClient (env)
 import LocalCooking.Main (defaultMain)
@@ -77,46 +79,17 @@ main = do
     , deps: chefDependencies
     , extraRedirect: \_ _ -> Nothing
     , leftDrawer:
-      { buttons: \_ -> []
-        -- [ divider {}
-        -- , listItem
-        --   { button: true
-        --   , onClick: mkEffFn1 \_ -> unsafeCoerceEff $ siteLinks MealsLink
-        --   }
-        --   [ listItemIcon {} restaurantMenuIcon
-        --   , listItemText
-        --     { primary: "Meals"
-        --     }
-        --   ]
-        -- , divider {}
-        -- , listItem
-        --   { button: true
-        --   , onClick: mkEffFn1 \_ -> unsafeCoerceEff $ siteLinks ChefsLink
-        --   }
-        --   [ listItemIcon {} $ svgIcon {viewBox: chefHatViewBox, color: SvgIcon.action}
-        --       [chefHat]
-        --   , listItemText
-        --     { primary: "Chefs"
-        --     }
-        --   ]
+      { buttons: drawersButtons
       }
     , topbar:
       { imageSrc: toLocation Logo40Png
-      , buttons: \{toURI,siteLinks,currentPageSignal,windowSizeSignal,authTokenSignal} ->
-        [ topbarButtons
-          { currentPageSignal
-          , siteLinks
-          , toURI
-          }
-        ]
+      , buttons: topbarButtons
       }
-    , content: \{toURI,siteLinks,windowSizeSignal,currentPageSignal} ->
-      [ content {toURI,siteLinks,windowSizeSignal,currentPageSignal} ]
+    , content: content
     , userDetails:
-      { buttons: \_ -> []
-      , content: \{currentPageSignal,siteLinks} ->
-        [ userDetails {currentPageSignal,siteLinks}
-        ]
+      { buttons: userDetailsButtons
+      , content: \params ->
+        userDetails params
       , obtain: \{user} -> do
         PreUserDetails mUser <- sequential $ PreUserDetails <$> user
         case mUser of
@@ -124,9 +97,7 @@ main = do
           _ -> pure Nothing
       }
     , error:
-      { content:
-        [ messages {siteErrorQueue: readOnly siteErrorQueue}
-        ]
+      { content: messages {siteErrorQueue: readOnly siteErrorQueue}
       }
     , extendedNetwork:
       [ Button.withStyles
