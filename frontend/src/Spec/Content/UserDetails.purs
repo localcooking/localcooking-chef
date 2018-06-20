@@ -7,6 +7,7 @@ import Prelude
 
 import Thermite as T
 import React (ReactElement, createClass, createElement) as R
+import React.DOM (text) as R
 import React.Signal.WhileMounted as Signal
 
 import Data.Maybe (Maybe (..))
@@ -18,7 +19,6 @@ import Control.Monad.Eff.Exception (EXCEPTION)
 
 import IxSignal.Internal (IxSignal)
 import IxSignal.Internal as IxSignal
-import Partial.Unsafe (unsafePartial)
 
 
 type State =
@@ -51,13 +51,14 @@ spec {siteLinks} = T.simpleSpec performAction render
 
     render :: T.Render State Unit Action
     render dispatch props state children =
-      [ unsafePartial
-      $ case state.page of -- TODO pack currentPageSignal listener to this level, so
+      [ case state.page of -- TODO pack currentPageSignal listener to this level, so
                             -- side buttons aren't redrawn
           UserDetailsLink mUserDetails -> case mUserDetails of
             Nothing -> general
             Just x -> case x of
               UserDetailsGeneralLink -> general
+              _ -> R.text ""
+          _ -> R.text ""
       ]
 
 

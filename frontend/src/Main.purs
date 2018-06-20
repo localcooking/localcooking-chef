@@ -10,7 +10,6 @@ import LocalCooking.Types.ServerToClient (env)
 import LocalCooking.Main (defaultMain)
 import LocalCooking.Spec.Misc.Branding (mainBrand)
 import LocalCooking.Dependencies.Chef (chefDependencies, newChefQueues)
-import LocalCooking.Global.Links.Class (initSiteLinks)
 import LocalCooking.Global.Links.Internal (ImageLinks (Logo40Png))
 
 import Prelude
