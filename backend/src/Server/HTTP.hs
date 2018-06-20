@@ -10,7 +10,7 @@
 
 module Server.HTTP where
 
-import Links (SiteLinks (RootLink))
+import Links (SiteLinks (RootLink, UserDetailsLink), UserDetailsLinks (..))
 
 import LocalCooking.Types (Env (..))
 import LocalCooking.Function.System (SystemM)
@@ -33,10 +33,10 @@ httpServer :: Env -> (SiteLinks -> MiddlewareT SystemM) -> RouterT (MiddlewareT 
 httpServer Env{envMkURI} handleAuthToken = do
 
   -- main routes
-  -- matchGroup (l_ "userDetails" </> o_) $ do
-  --   matchHere handleAuthToken
-  --   match (l_ "general" </> o_) handleAuthToken
-  --   match (l_ "security" </> o_) handleAuthToken
+  matchGroup (l_ "userDetails" </> o_) $ do
+    matchHere $ handleAuthToken $ UserDetailsLink Nothing
+    match (l_ "general" </> o_) $ handleAuthToken $ UserDetailsLink $ Just UserDetailsGeneral
+    match (l_ "security" </> o_) $ handleAuthToken $ UserDetailsLink $ Just UserDetailsSecurity
   --   match (l_ "orders" </> o_) handleAuthToken
   --   match (l_ "diet" </> o_) handleAuthToken
   --   match (l_ "allergies" </> o_) handleAuthToken
