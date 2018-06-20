@@ -88,8 +88,7 @@ main = do
     , content: content
     , userDetails:
       { buttons: userDetailsButtons
-      , content: \params ->
-        userDetails params
+      , content: userDetails
       , obtain: \{user} -> do
         PreUserDetails mUser <- sequential $ PreUserDetails <$> user
         case mUser of
