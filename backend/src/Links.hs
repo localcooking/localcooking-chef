@@ -119,6 +119,9 @@ instance LocalCookingSiteLinks SiteLinks where
         RootLink -> ""
         AboutLink -> "About - "
         RegisterLink -> "Register - "
+        UserDetailsLink mDetails -> case mDetails of
+          Nothing -> "User Details - "
+          Just d -> userDetailsToDocumentTitle d <> "User Details - "
       ) <> "Local Cooking Chefs"
 
 
