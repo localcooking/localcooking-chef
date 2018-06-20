@@ -67,15 +67,12 @@ main :: Eff Effects Unit
 main = do
   log "Starting Local Cooking Chefs frontend..."
 
-  initSiteLink <- initSiteLinks
-
   chefQueues <- newChefQueues
   siteErrorQueue <- One.newQueue
 
 
   defaultMain
     { env
-    , initSiteLinks: initSiteLink
     , palette
     , siteQueues: chefQueues
     , deps: chefDependencies
