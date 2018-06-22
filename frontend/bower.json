@@ -15,8 +15,9 @@
     "purescript-psci-support": "^3.0.0"
   },
   "resolutions": {
-    "purescript-localcooking-spec": "2d37c7912da099214db38e75fa391f70fe2c42bb",
-    "purescript-localcooking-dependencies": "3505766ef80e96990fa075d4cbb56893b78be424",
-    "purescript-localcooking-shared": "d849f66fce9c9680a6c0bac4a5a045643f23380c"
+    "purescript-uuid": "2e563284ee5c41d75bf9010de3c4cded9f0223db",
+    "purescript-uri": "0647b672c505514581399e5c47aa7ef2b7b73404",
+    "purescript-pathy": "b5c54ce00455a4fc12b3614d9e99dfeca9d3effc",
+    "purescript-arraybuffer-types": "2.x"
   }
 }
